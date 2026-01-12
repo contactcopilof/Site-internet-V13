@@ -182,6 +182,9 @@
     <!-- Polices -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <!-- Tailwind CSS (CDN pour rapidité sans build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -976,7 +979,7 @@
                         <!-- Formulaire -->
                         <div class="lg:col-span-2">
                             <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-lg shadow-brand-900/5">
-                                <form id="contact-form" method="POST" action="/devenir-auditeur-qualiopi/send-mail.php" class="space-y-6">
+                                <form id="contact-form" method="POST" action="send-mail.php" class="space-y-6">
                                     <div class="grid md:grid-cols-2 gap-6">
                                         <div><label for="nom" class="block text-sm font-medium text-slate-700 mb-2">Nom *</label><input type="text" id="nom" name="nom" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Votre nom"></div>
                                         <div><label for="prenom" class="block text-sm font-medium text-slate-700 mb-2">Prénom *</label><input type="text" id="prenom" name="prenom" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Votre prénom"></div>
@@ -1341,62 +1344,66 @@
             });
         });
 
-        // --- FORM SUBMISSION ---
+        // --- FORM SUBMISSION HANDLING ---
         const form = document.getElementById('contact-form');
         const successDiv = document.getElementById('form-success');
         const resetBtn = document.getElementById('reset-form-btn');
 
         if(form) {
             form.addEventListener('submit', (e) => {
-                e.preventDefault();
+                // IMPORTANT: On NE bloque PAS l'événement par défaut ici (pas de e.preventDefault())
+                // pour que le formulaire soit bien posté vers le fichier PHP.
+                // On met juste à jour l'interface pour le feedback utilisateur.
                 const btn = form.querySelector('button[type="submit"]');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = 'Envoi en cours...';
-                btn.disabled = true;
-
-                setTimeout(() => {
-                    form.classList.add('hidden');
-                    successDiv.classList.remove('hidden');
-                    successDiv.classList.add('flex');
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 1000);
+                if(btn) {
+                    btn.innerHTML = 'Envoi en cours...';
+                    btn.disabled = true;
+                }
             });
         }
 
         if(resetBtn) {
             resetBtn.addEventListener('click', () => {
+                // Réinitialise l'URL sans le paramètre success
+                window.history.pushState({}, document.title, window.location.pathname);
+                // Réinitialise la vue
                 form.reset();
                 successDiv.classList.add('hidden');
                 successDiv.classList.remove('flex');
                 form.classList.remove('hidden');
+                // Réinitialise le bouton
+                const btn = form.querySelector('button[type="submit"]');
+                if(btn) {
+                    btn.innerHTML = '<span>Envoyer ma demande</span><i data-lucide="send" class="w-5 h-5"></i>';
+                    btn.disabled = false;
+                }
             });
         }
     </script>
+    
+    <!-- Script de gestion du retour PHP (Message de succès) -->
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams  = new URLSearchParams(window.location.search);
-    const success    = urlParams.get('success');
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams  = new URLSearchParams(window.location.search);
+        const success    = urlParams.get('success');
 
-    const form       = document.getElementById('contact-form');
-    const successDiv = document.getElementById('form-success');
-    const resetBtn   = document.getElementById('reset-form-btn');
+        const form       = document.getElementById('contact-form');
+        const successDiv = document.getElementById('form-success');
 
-    // Affichage du message de succès après envoi
-    if (success === '1' && form && successDiv) {
-        form.classList.add('hidden');
-        successDiv.classList.remove('hidden');
-        successDiv.classList.add('flex');
-    }
-
-    // Bouton "Envoyer un autre message"
-    if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-            window.location.href = '/devenir-auditeur-qualiopi/#contact';
-        });
-    }
-});
-</script>
+        // Affichage du message de succès si on revient du PHP avec ?success=1
+        if (success === '1' && form && successDiv) {
+            form.classList.add('hidden');
+            successDiv.classList.remove('hidden');
+            successDiv.classList.add('flex');
+            
+            // Scroll vers la section contact pour voir le message
+            const contactSection = document.getElementById('contact');
+            if(contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+    </script>
 
 </body>
 </html>
