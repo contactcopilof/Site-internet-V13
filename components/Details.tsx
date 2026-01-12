@@ -1,0 +1,1 @@
+// Fichier supprimé (Migration vers Vanilla JS)

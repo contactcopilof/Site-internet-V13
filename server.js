@@ -1,0 +1,1413 @@
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const port = process.env.PORT || 8080;
+
+// Contenu HTML complet du site Copilof (synchronisé avec index.html)
+const htmlContent = `<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO & Méta-données -->
+    <title>Formation Auditeur QUALIOPI V9 - Devenez Auditeur Certifié | CopilOF</title>
+    <meta name="description" content="Formation experte de 2 jours (14h) pour maîtriser le Référentiel National Qualité et la posture d'auditeur selon l'ISO 19011." />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Données structurées FAQPage pour le SEO IA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Quel est l'objectif principal de cette formation ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'objectif est de vous permettre de passer du texte théorique du référentiel à la réalité opérationnelle de l’audit en apprenant à « penser comme un auditeur QUALIOPI »."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui anime la Formation auditeur QUALIOPI ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La formation est conçue et animée par un auditeur de terrain en exercice, ayant réalisé plus de 700 audits pour plusieurs organismes certificateurs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "À qui s’adresse cette prestation ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Elle est destinée aux responsables QUALIOPI, dirigeants d’organismes de formation ou CFA, consultants et professionnels souhaitant devenir auditeur QUALIOPI."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quels sont les prérequis pour s'inscrire ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Une expérience préalable dans le secteur de la formation professionnelle est indispensable pour suivre ce cursus."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle est la durée totale de la formation ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La formation dure 14 heures, réparties sur deux jours consécutifs de 7 heures chacun."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelles sont les modalités d'organisation ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Vous pouvez suivre cette formation en présentiel ou en distanciel synchrone selon vos besoins."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "La formation traite-t-elle de la version 9 du référentiel ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, le programme est spécifiquement conçu pour maîtriser les spécificités et les indicateurs du Référentiel QUALIOPI V9."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel est le rôle de la norme ISO 19011 dans ce programme ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le programme inclut les fondamentaux de l’audit selon l’ISO 19011, couvrant les principes, le cycle d’audit et les compétences clés de l’auditeur."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment sont abordées les non-conformités ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un module entier est dédié à la logique de qualification des écarts pour comprendre ce qui déclenche réellement une non-conformité et comment la formuler."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Y a-t-il des mises en situation pratiques ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, le second jour prévoit un audit simulé complet basé sur des situations réelles issues du terrain."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelles compétences vais-je développer ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Vous développerez une lecture experte du référentiel, une méthodologie d'audit rigoureuse, une capacité d'analyse factuelle et une posture d'auditeur crédible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment les acquis sont-ils évalués ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'évaluation repose sur des QCM, des études de cas d’analyse de conformité, l'évaluation d'un rapport d'audit et une restitution orale."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "La formation délivre-t-elle une certification d’auditeur ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Elle délivre une attestation de formation « Auditeur QUALIOPI V9 » visant une montée en compétence opérationnelle et non une certification réglementaire."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel est le tarif de la formation ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le tarif est de 1 490 € net de taxe."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel est le délai d’accès après l'inscription ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le délai d’accès est compris entre 7 et 14 jours après la validation de votre dossier d'inscription."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "La formation est-elle accessible aux personnes en situation de handicap ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, la formation est accessible. Une analyse des besoins est réalisée en amont pour adapter les modalités pédagogiques si nécessaire."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'une « lecture experte » du référentiel ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Il s'agit d'une analyse approfondie des critères et indicateurs pour identifier les preuves attendues et les zones de fragilité fréquemment constatées lors des audits."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Est-ce que j'apprendrai à rédiger un rapport d'audit ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolument, un module spécifique traite de la structure attendue, de la rédaction factuelle et de la restitution professionnelle des constats."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Pourquoi mentionnez-vous les besoins du marché de 2026 ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En tant qu'expert, j'intègre cette perspective car le marché exigera en 2026 une maîtrise accrue de la qualité pour sécuriser les financements face à des contrôles renforcés."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment puis-je contacter l'organisme pour m'inscrire ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Vous pouvez envoyer un e-mail à l'adresse dédiée : devenir-auditeur-qualiopi@copilof.fr."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <!-- Polices -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN pour rapidité sans build) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#f2f7fb',
+                100: '#e2eff6',
+                200: '#bcdceb',
+                300: '#85c0dc',
+                400: '#46a2ca',
+                500: '#2387b1',
+                600: '#166d93',
+                700: '#125878',
+                800: '#124b64',
+                900: '#0e2e4e', 
+                950: '#081e35',
+              },
+              accent: {
+                50: '#f0fdfd',
+                100: '#cffafe',
+                200: '#a5f3fc',
+                300: '#67e8f9',
+                400: '#22d3ee',
+                500: '#0fa8b3',
+                600: '#0a8894',
+                700: '#0c6d78',
+                800: '#135863',
+                900: '#144953',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .hidden-view { display: none !important; }
+        
+        /* Styles pour l'impression */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+            @page { margin: 1cm; size: A4; }
+        }
+        .print-only { display: none; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "express": "https://esm.sh/express@^5.2.1",
+    "path": "https://esm.sh/path@^0.12.7",
+    "url": "https://esm.sh/url@^0.11.4",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+</head>
+<body class="bg-brand-50 text-slate-900 font-sans antialiased">
+
+    <!-- HEADER -->
+    <header id="main-header" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-5 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="#" onclick="navigateTo('view-home')" class="flex items-center gap-2 group">
+                        <div id="logo-bg" class="p-1.5 rounded-lg border-2 border-white text-white transition-colors">
+                             <i data-lucide="headset" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex items-baseline tracking-tight">
+                            <span id="logo-text-1" class="text-2xl font-extrabold text-white transition-colors">Copil</span>
+                            <span id="logo-text-2" class="text-2xl font-extrabold text-accent-400 transition-colors">OF</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#public" onclick="navigateTo('view-home')" class="nav-link text-sm font-medium text-slate-100 hover:text-accent-500 transition-colors">Public</a>
+                    <a href="#programme" onclick="navigateTo('view-home')" class="nav-link text-sm font-medium text-slate-100 hover:text-accent-500 transition-colors">Programme</a>
+                    <a href="#infos" onclick="navigateTo('view-home')" class="nav-link text-sm font-medium text-slate-100 hover:text-accent-500 transition-colors">Infos Pratiques</a>
+                    <a href="#faq" onclick="navigateTo('view-home')" class="nav-link text-sm font-medium text-slate-100 hover:text-accent-500 transition-colors">FAQ</a>
+                    <a href="#contact" onclick="navigateTo('view-home')" class="nav-link text-sm font-medium text-slate-100 hover:text-accent-500 transition-colors">Contact</a>
+                </nav>
+
+                <div class="hidden md:flex items-center gap-3">
+                     <a href="mailto:devenir-auditeur-qualiopi@copilof.fr" id="header-cta" class="px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5 bg-white text-brand-900 hover:bg-slate-100">
+                        S'inscrire
+                     </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="p-2 rounded-md text-white">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white absolute top-full left-0 w-full shadow-lg border-t border-slate-100">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#public" onclick="navigateTo('view-home')" class="mobile-link block px-3 py-3 text-base font-medium text-slate-700 hover:text-accent-600 hover:bg-slate-50 rounded-md">Public</a>
+                <a href="#programme" onclick="navigateTo('view-home')" class="mobile-link block px-3 py-3 text-base font-medium text-slate-700 hover:text-accent-600 hover:bg-slate-50 rounded-md">Programme</a>
+                <a href="#infos" onclick="navigateTo('view-home')" class="mobile-link block px-3 py-3 text-base font-medium text-slate-700 hover:text-accent-600 hover:bg-slate-50 rounded-md">Infos Pratiques</a>
+                <a href="#faq" onclick="navigateTo('view-home')" class="mobile-link block px-3 py-3 text-base font-medium text-slate-700 hover:text-accent-600 hover:bg-slate-50 rounded-md">FAQ</a>
+                <a href="#contact" onclick="navigateTo('view-home')" class="mobile-link block px-3 py-3 text-base font-medium text-slate-700 hover:text-accent-600 hover:bg-slate-50 rounded-md">Contact</a>
+                
+                <a href="mailto:devenir-auditeur-qualiopi@copilof.fr" class="block w-full text-center mt-2 px-5 py-3 rounded-md font-semibold bg-accent-600 text-white hover:bg-accent-700">
+                    S'inscrire
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- VIEW: MAIN HOME -->
+    <div id="view-home">
+        <main>
+            <!-- HERO -->
+            <section class="relative bg-brand-900 text-white pt-32 pb-20 overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
+                    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white blur-3xl"></div>
+                    <div class="absolute top-1/2 -left-24 w-72 h-72 rounded-full bg-accent-500 blur-3xl"></div>
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-800 border border-brand-700 text-brand-100 text-sm font-medium mb-6 animate-fade-in">
+                            <i data-lucide="award" class="w-4 h-4 text-accent-400"></i>
+                            <span>Formation qualifiante</span>
+                        </div>
+                        
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                            Formation Auditeur <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-brand-200">QUALIOPI V9</span>
+                        </h1>
+                        
+                        <h2 class="text-2xl md:text-3xl text-slate-200 mb-8 font-light">
+                            Maîtriser l'audit pratiqué par les organismes certificateurs QUALIOPI
+                        </h2>
+
+                        <div class="flex flex-wrap justify-center gap-4 text-sm md:text-base text-slate-300 mb-10">
+                            <div class="flex items-center gap-2 bg-brand-800/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-brand-700 hover:bg-brand-800 transition-colors cursor-default">
+                                <i data-lucide="calendar" class="w-5 h-5 text-accent-400"></i>
+                                <span>14 Heures (2 Jours)</span>
+                            </div>
+                            <div class="flex items-center gap-2 bg-brand-800/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-brand-700 hover:bg-brand-800 transition-colors cursor-default">
+                                <i data-lucide="user-check" class="w-5 h-5 text-accent-400"></i>
+                                <span>Par un auditeur expert</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                            <a href="#contact" class="w-full sm:w-auto px-8 py-4 bg-accent-600 hover:bg-accent-700 text-white rounded-lg font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-accent-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                                S'inscrire maintenant
+                                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </a>
+                            <a href="mailto:devenir-auditeur-qualiopi@copilof.fr?subject=Question sur la formation" class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg font-semibold text-lg transition-all duration-300 backdrop-blur-sm flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                                Poser une question
+                            </a>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <a href="#programme" class="text-sm text-slate-400 hover:text-white underline underline-offset-4 flex items-center justify-center gap-1 transition-colors group">
+                                <i data-lucide="file-text" class="w-3 h-3 group-hover:text-accent-400 transition-colors"></i>
+                                Recevoir le programme détaillé
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FEATURES -->
+            <section id="features" class="py-20 bg-brand-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                            Pourquoi cette formation est unique
+                        </h2>
+                        <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                            Passez du référentiel théorique à la réalité opérationnelle du terrain.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="bg-white p-8 rounded-xl border border-brand-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="w-14 h-14 bg-brand-50 rounded-lg flex items-center justify-center text-brand-600 mb-6 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+                                <i data-lucide="user-check" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Expertise Terrain</h3>
+                            <p class="text-slate-600 leading-relaxed">Animation par un auditeur expérimenté intervenant pour plusieurs certificateurs.</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl border border-brand-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="w-14 h-14 bg-brand-50 rounded-lg flex items-center justify-center text-brand-600 mb-6 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+                                <i data-lucide="shield-check" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">+700 Audits</h3>
+                            <p class="text-slate-600 leading-relaxed">Retour d’expérience massif pour comprendre les cas réels et les pièges à éviter.</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl border border-brand-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="w-14 h-14 bg-brand-50 rounded-lg flex items-center justify-center text-brand-600 mb-6 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+                                <i data-lucide="brain" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Attendus Implicites</h3>
+                            <p class="text-slate-600 leading-relaxed">Décryptez ce que les certificateurs attendent au-delà du texte strict du référentiel.</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl border border-brand-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="w-14 h-14 bg-brand-50 rounded-lg flex items-center justify-center text-brand-600 mb-6 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+                                <i data-lucide="target" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Posture d'Auditeur</h3>
+                            <p class="text-slate-600 leading-relaxed">Objectif : vous faire penser comme un auditeur, pas juste appliquer une grille.</p>
+                        </div>
+                    </div>
+
+                    <!-- Marché 2026 -->
+                    <div class="mt-16 bg-white rounded-2xl shadow-xl border border-brand-100 overflow-hidden">
+                        <div class="p-8 md:p-12 grid lg:grid-cols-2 gap-12 items-center relative">
+                            <div class="absolute top-0 right-0 w-64 h-64 bg-accent-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                            
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-3 mb-4 text-accent-600">
+                                    <i data-lucide="trending-up" class="w-7 h-7"></i>
+                                    <span class="font-bold tracking-wider uppercase text-sm">Contexte Marché 2026</span>
+                                </div>
+                                <h3 class="text-3xl font-bold text-slate-900 mb-6">Un marché en tension</h3>
+                                <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                                    2026 sera une année record pour l'audit. Le cumul des <strong>audits de surveillance</strong> et des <strong>renouvellements de certification</strong> crée un besoin massif d'auditeurs qualifiés.
+                                </p>
+                                <p class="text-brand-600 font-medium bg-brand-50 p-4 rounded-lg border border-brand-100">
+                                    Les organismes certificateurs recherchent activement des profils capables d'absorber cette charge.
+                                </p>
+                            </div>
+
+                            <div class="relative z-10 grid sm:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-xl border border-brand-100 shadow-sm hover:shadow-md transition-all group">
+                                <div class="w-12 h-12 bg-brand-100 rounded-lg flex items-center justify-center text-brand-600 mb-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                                    <i data-lucide="building-2" class="w-6 h-6"></i>
+                                </div>
+                                <div class="text-4xl font-bold text-slate-900 mb-2">38</div>
+                                <div class="text-slate-600 font-medium">Organismes Certificateurs</div>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-xl border border-accent-100 shadow-sm hover:shadow-md transition-all group">
+                                <div class="w-12 h-12 bg-accent-100 rounded-lg flex items-center justify-center text-accent-600 mb-4 group-hover:bg-accent-600 group-hover:text-white transition-colors">
+                                    <i data-lucide="trending-up" class="w-6 h-6"></i>
+                                </div>
+                                <div class="text-4xl font-bold text-slate-900 mb-2">2026</div>
+                                <div class="text-slate-600 font-medium">Pic d'activité</div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prérequis -->
+                    <div class="mt-8 max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg border-l-4 border-accent-500">
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1">
+                                <i data-lucide="alert-circle" class="w-8 h-8 text-accent-600"></i>
+                            </div>
+                            <div class="text-left">
+                                <h3 class="text-2xl font-bold text-slate-900 mb-4">Prérequis unique</h3>
+                                <p class="text-slate-700 text-lg mb-6">
+                                    Pour tirer le meilleur parti de cette formation intensive, une <strong>expérience dans le secteur de la formation professionnelle</strong> est indispensable.
+                                </p>
+                                <div class="bg-brand-50 p-4 rounded-lg text-sm text-slate-600 italic border border-brand-100">
+                                    Cette formation ne vise pas à apprendre les bases de la formation professionnelle, mais à maîtriser les subtilités de son audit qualité.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AUDIENCE -->
+            <section id="public" class="py-20 bg-white border-y border-brand-100">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-10">
+                        À qui s’adresse cette formation ?
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-6 text-left">
+                        <div class="flex items-center gap-4 bg-brand-50 p-6 rounded-xl shadow-sm border border-brand-100 hover:shadow-md transition-shadow">
+                            <div class="text-brand-600 bg-white p-3 rounded-full shadow-sm shrink-0">
+                                <i data-lucide="user-cog" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-medium text-slate-800 text-lg">Responsables et référents QUALIOPI</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-brand-50 p-6 rounded-xl shadow-sm border border-brand-100 hover:shadow-md transition-shadow">
+                            <div class="text-brand-600 bg-white p-3 rounded-full shadow-sm shrink-0">
+                                <i data-lucide="briefcase" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-medium text-slate-800 text-lg">Dirigeants d’OF ou CFA</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-brand-50 p-6 rounded-xl shadow-sm border border-brand-100 hover:shadow-md transition-shadow">
+                            <div class="text-brand-600 bg-white p-3 rounded-full shadow-sm shrink-0">
+                                <i data-lucide="users" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-medium text-slate-800 text-lg">Consultants accompagnateurs</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-brand-50 p-6 rounded-xl shadow-sm border border-brand-100 hover:shadow-md transition-shadow">
+                            <div class="text-brand-600 bg-white p-3 rounded-full shadow-sm shrink-0">
+                                <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-medium text-slate-800 text-lg">Professionnels en reconversion</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DETAILS -->
+            <section id="objectifs" class="py-20 bg-brand-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold text-slate-900">Objectifs & Compétences</h2>
+                        <p class="mt-4 text-slate-600">Tout ce que vous maîtriserez à l'issue des 2 jours</p>
+                    </div>
+
+                    <div class="grid lg:grid-cols-12 gap-12">
+                        <!-- Objectifs -->
+                        <div class="lg:col-span-7">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-sm font-bold">1</span>
+                                Objectifs opérationnels
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3"><div class="mt-1 min-w-[20px] text-accent-500"><i data-lucide="check" class="w-5 h-5"></i></div><p class="text-slate-700 text-lg leading-relaxed">Interpréter le Référentiel QUALIOPI V9 avec un regard d’auditeur</p></div>
+                                <div class="flex items-start gap-3"><div class="mt-1 min-w-[20px] text-accent-500"><i data-lucide="check" class="w-5 h-5"></i></div><p class="text-slate-700 text-lg leading-relaxed">Préparer et structurer un audit QUALIOPI</p></div>
+                                <div class="flex items-start gap-3"><div class="mt-1 min-w-[20px] text-accent-500"><i data-lucide="check" class="w-5 h-5"></i></div><p class="text-slate-700 text-lg leading-relaxed">Conduire des entretiens d’audit efficaces et ciblés</p></div>
+                                <div class="flex items-start gap-3"><div class="mt-1 min-w-[20px] text-accent-500"><i data-lucide="check" class="w-5 h-5"></i></div><p class="text-slate-700 text-lg leading-relaxed">Analyser les preuves et identifier les points sensibles</p></div>
+                                <div class="flex items-start gap-3"><div class="mt-1 min-w-[20px] text-accent-500"><i data-lucide="check" class="w-5 h-5"></i></div><p class="text-slate-700 text-lg leading-relaxed">Qualifier les écarts et non-conformités</p></div>
+                                <div class="flex items-start gap-3"><div class="mt-1 min-w-[20px] text-accent-500"><i data-lucide="check" class="w-5 h-5"></i></div><p class="text-slate-700 text-lg leading-relaxed">Rédiger un rapport d’audit clair, factuel et exploitable</p></div>
+                            </div>
+                        </div>
+
+                        <!-- Compétences -->
+                        <div class="lg:col-span-5 bg-white rounded-2xl p-8 border border-brand-100 shadow-sm">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-accent-100 text-accent-600 flex items-center justify-center text-sm font-bold">2</span>
+                                Compétences clés
+                            </h3>
+                            <div class="grid gap-6">
+                                <div class="flex items-center gap-4"><div class="p-3 bg-brand-50 rounded-lg shadow-sm text-brand-600"><i data-lucide="book-open" class="w-6 h-6"></i></div><div><h4 class="font-bold text-slate-900">Lecture experte</h4><p class="text-sm text-slate-600">Du Référentiel QUALIOPI V9</p></div></div>
+                                <div class="flex items-center gap-4"><div class="p-3 bg-brand-50 rounded-lg shadow-sm text-brand-600"><i data-lucide="clipboard-list" class="w-6 h-6"></i></div><div><h4 class="font-bold text-slate-900">Méthodologie</h4><p class="text-sm text-slate-600">Conforme à l'ISO 19011</p></div></div>
+                                <div class="flex items-center gap-4"><div class="p-3 bg-brand-50 rounded-lg shadow-sm text-brand-600"><i data-lucide="search" class="w-6 h-6"></i></div><div><h4 class="font-bold text-slate-900">Analyse factuelle</h4><p class="text-sm text-slate-600">Traçabilité des preuves</p></div></div>
+                                <div class="flex items-center gap-4"><div class="p-3 bg-brand-50 rounded-lg shadow-sm text-brand-600"><i data-lucide="pen-tool" class="w-6 h-6"></i></div><div><h4 class="font-bold text-slate-900">Rédaction pro</h4><p class="text-sm text-slate-600">Constats et rapports</p></div></div>
+                                <div class="flex items-center gap-4"><div class="p-3 bg-brand-50 rounded-lg shadow-sm text-brand-600"><i data-lucide="scale" class="w-6 h-6"></i></div><div><h4 class="font-bold text-slate-900">Posture</h4><p class="text-sm text-slate-600">Impartialité et crédibilité</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Evaluation -->
+                    <div class="mt-16 border-t border-brand-200 pt-12">
+                        <h3 class="text-xl font-bold text-slate-900 mb-6 text-center">Modalités d'évaluation</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="p-4 bg-white rounded-lg border border-brand-100 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="block font-semibold text-brand-700">QCM</span>
+                                <span class="text-sm text-slate-600">Validation des connaissances</span>
+                            </div>
+                            <div class="p-4 bg-white rounded-lg border border-brand-100 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="block font-semibold text-brand-700">Études de cas</span>
+                                <span class="text-sm text-slate-600">Analyse de conformité</span>
+                            </div>
+                            <div class="p-4 bg-white rounded-lg border border-brand-100 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="block font-semibold text-brand-700">Rapport</span>
+                                <span class="text-sm text-slate-600">Évaluation d'un rapport</span>
+                            </div>
+                            <div class="p-4 bg-white rounded-lg border border-brand-100 shadow-sm hover:shadow-md transition-shadow">
+                                <span class="block font-semibold text-brand-700">Oral</span>
+                                <span class="text-sm text-slate-600">Restitution des constats</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROGRAM -->
+            <section id="programme" class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Programme Détaillé</h2>
+                        <p class="text-lg text-slate-600">Un parcours structuré sur 2 jours pour maîtriser la posture et la technique.</p>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-8 lg:gap-12">
+                        <!-- Jour 1 -->
+                        <div class="bg-white rounded-2xl shadow-lg shadow-brand-900/5 border border-brand-100 overflow-hidden">
+                            <div class="bg-brand-900 p-6 text-white">
+                                <h3 class="text-2xl font-bold">Jour 1</h3>
+                                <p class="text-brand-200">Comprendre le cadre et raisonner comme un auditeur</p>
+                            </div>
+                            <div class="p-6 md:p-8 space-y-8">
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">1</div><h4 class="text-lg font-bold text-slate-900 mb-2">Enjeux réglementaires et cadre QUALIOPI V9</h4><p class="text-slate-600 text-base leading-relaxed">Cadre légal de la certification, finalités de QUALIOPI, logique et pratiques des organismes certificateurs.</p></div>
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">2</div><h4 class="text-lg font-bold text-slate-900 mb-2">Lecture experte du Référentiel QUALIOPI V9</h4><p class="text-slate-600 text-base leading-relaxed">Analyse approfondie des critères et indicateurs, preuves attendues, zones de fragilité fréquemment constatées en audit.</p></div>
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">3</div><h4 class="text-lg font-bold text-slate-900 mb-2">Fondamentaux de l’audit selon l’ISO 19011</h4><p class="text-slate-600 text-base leading-relaxed">Principes de l’audit, cycle d’audit, compétences clés de l’auditeur QUALIOPI.</p></div>
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">4</div><h4 class="text-lg font-bold text-slate-900 mb-2">Impartialité, compétence et déontologie</h4><p class="text-slate-600 text-base leading-relaxed">Posture professionnelle, indépendance, gestion des situations sensibles et des conflits d’intérêts.</p></div>
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">5</div><h4 class="text-lg font-bold text-slate-900 mb-2">Préparer un audit comme un certificateur</h4><p class="text-slate-600 text-base leading-relaxed">Définition du périmètre, plan d’audit, échantillonnage, construction de check-lists opérationnelles.</p></div>
+                            </div>
+                        </div>
+
+                        <!-- Jour 2 -->
+                        <div class="bg-white rounded-2xl shadow-lg shadow-brand-900/5 border border-brand-100 overflow-hidden">
+                            <div class="bg-brand-700 p-6 text-white">
+                                <h3 class="text-2xl font-bold">Jour 2</h3>
+                                <p class="text-brand-100">Pratiquer l’audit QUALIOPI sur des cas réels</p>
+                            </div>
+                            <div class="p-6 md:p-8 space-y-8">
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">6</div><h4 class="text-lg font-bold text-slate-900 mb-2">Techniques d’audit et entretiens efficaces</h4><p class="text-slate-600 text-base leading-relaxed">Questionnement, analyse documentaire, collecte et qualification des preuves.</p></div>
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">7</div><h4 class="text-lg font-bold text-slate-900 mb-2">Écarts et non-conformités : logique de qualification</h4><p class="text-slate-600 text-base leading-relaxed">Comprendre ce qui déclenche réellement une non-conformité et comment elle est formulée.</p></div>
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">8</div><h4 class="text-lg font-bold text-slate-900 mb-2">Rédaction du rapport d’audit QUALIOPI V9</h4><p class="text-slate-600 text-base leading-relaxed">Structure attendue, rédaction factuelle, restitution professionnelle des constats.</p></div>
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">9</div><h4 class="text-lg font-bold text-slate-900 mb-2">Audit QUALIOPI V9 simulé – cas pratiques</h4><p class="text-slate-600 text-base leading-relaxed">Audit complet basé sur des situations réelles issues du terrain.</p></div>
+                                <div class="relative pl-10"><div class="absolute left-0 top-0 w-8 h-8 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 font-bold text-sm">10</div><h4 class="text-lg font-bold text-slate-900 mb-2">Se professionnaliser durablement</h4><p class="text-slate-600 text-base leading-relaxed">Positionnement professionnel, limites de mission, crédibilité face aux acteurs du marché.</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 text-center">
+                        <a href="Programme-Formation-Qualiopi-CopilOF.pdf" download="Programme-Formation-Qualiopi-CopilOF.pdf" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-accent-600 border border-transparent rounded-full hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 shadow-md hover:shadow-lg gap-2">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                            Télécharger le programme (PDF)
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRACTICAL INFO -->
+            <section id="infos" class="py-20 bg-brand-900 text-white relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-12">
+                        <!-- Left -->
+                        <div class="space-y-8">
+                            <div>
+                                <h2 class="text-3xl font-bold mb-6">Valorisation Professionnelle</h2>
+                                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+                                    <div class="flex items-start gap-4 mb-6">
+                                        <i data-lucide="badge-check" class="w-12 h-12 text-accent-500 flex-shrink-0"></i>
+                                        <div>
+                                            <h3 class="text-xl font-bold mb-2">Attestation Auditeur QUALIOPI V9</h3>
+                                            <p class="text-brand-100 leading-relaxed">Une attestation officielle remise en fin de formation, valorisable sur votre CV pour justifier d'une montée en compétence structurée et alignée sur le référentiel en vigueur.</p>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center gap-3 text-sm text-brand-200"><i data-lucide="shield" class="w-4 h-4"></i><span>Conforme ISO 19011 & ISO/IEC 17065</span></div>
+                                        <div class="flex items-center gap-3 text-sm text-brand-200"><i data-lucide="shield" class="w-4 h-4"></i><span>Basé sur le Référentiel National Qualité V9</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-brand-800 rounded-xl p-6">
+                                <h3 class="font-bold mb-3">Accessibilité</h3>
+                                <p class="text-sm text-brand-200">Formation accessible aux personnes en situation de handicap. Une analyse des besoins est réalisée en amont afin d’adapter les modalités pédagogiques.</p>
+                            </div>
+                        </div>
+
+                        <!-- Right Card -->
+                        <div class="bg-white text-slate-900 rounded-3xl p-8 shadow-2xl">
+                            <h3 class="text-2xl font-bold text-brand-900 mb-8 pb-4 border-b border-slate-100">Modalités Pratiques</h3>
+                            <div class="space-y-6">
+                                <div class="flex items-start gap-4"><div class="p-3 bg-brand-50 rounded-lg text-brand-600"><i data-lucide="euro" class="w-6 h-6"></i></div><div><span class="block text-sm text-slate-500 font-medium">Tarif</span><span class="text-xl font-bold text-slate-900">1 490 € net de taxe</span></div></div>
+                                <div class="flex items-start gap-4"><div class="p-3 bg-brand-50 rounded-lg text-brand-600"><i data-lucide="clock" class="w-6 h-6"></i></div><div><span class="block text-sm text-slate-500 font-medium">Durée</span><span class="text-lg font-semibold text-slate-900">14 Heures</span><span class="text-slate-600 text-sm block">2 jours consécutifs (7h/jour)</span></div></div>
+                                <div class="flex items-start gap-4"><div class="p-3 bg-brand-50 rounded-lg text-brand-600"><i data-lucide="map-pin" class="w-6 h-6"></i></div><div><span class="block text-sm text-slate-500 font-medium">Format</span><span class="text-lg font-semibold text-slate-900">Présentiel ou Distanciel Synchrone</span></div></div>
+                                <div class="flex items-start gap-4"><div class="p-3 bg-brand-50 rounded-lg text-brand-600"><i data-lucide="calendar" class="w-6 h-6"></i></div><div><span class="block text-sm text-slate-500 font-medium">Délai d'accès</span><span class="text-lg font-semibold text-slate-900">7 à 14 jours</span><span class="text-slate-600 text-sm block">Après validation de l'inscription</span></div></div>
+                            </div>
+                            <div class="mt-8 pt-6 border-t border-slate-100">
+                                <a href="mailto:devenir-auditeur-qualiopi@copilof.fr" class="block w-full text-center py-4 bg-accent-600 hover:bg-accent-700 text-white font-bold rounded-xl transition-colors text-lg">Je m'inscris</a>
+                                <p class="text-center text-xs text-slate-400 mt-3">Places limitées pour garantir la qualité pédagogique</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section id="faq" class="py-20 bg-brand-50">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Questions Fréquentes & Expertise</h2>
+                        <p class="text-lg text-slate-600 max-w-2xl mx-auto">Des réponses précises pour comprendre les enjeux du métier d'auditeur Qualiopi.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Q1 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Quel est l'objectif principal de cette formation ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    L'objectif est de vous permettre de passer du texte théorique du référentiel à la réalité opérationnelle de l’audit en apprenant à « penser comme un auditeur QUALIOPI »."
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Qui anime la Formation auditeur QUALIOPI ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    La formation est conçue et animée par un auditeur de terrain en exercice, ayant réalisé plus de 700 audits pour plusieurs organismes certificateurs.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">À qui s’adresse cette prestation ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Elle est destinée aux responsables QUALIOPI, dirigeants d’organismes de formation ou CFA, consultants et professionnels souhaitant <strong>devenir auditeur QUALIOPI</strong>.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Quels sont les prérequis pour s'inscrire ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Une expérience préalable dans le secteur de la formation professionnelle est indispensable pour suivre ce cursus.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Quelle est la durée totale de la formation ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    La formation dure 14 heures, réparties sur deux jours consécutifs de 7 heures chacun.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q6 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Quelles sont les modalités d'organisation ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Vous pouvez suivre cette formation en présentiel ou en distanciel synchrone selon vos besoins.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q7 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">La formation traite-t-elle de la version 9 du référentiel ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Oui, le programme est spécifiquement conçu pour maîtriser les spécificités et les indicateurs du Référentiel QUALIOPI V9.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q8 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Quel est le rôle de la norme ISO 19011 dans ce programme ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Le programme inclut les fondamentaux de l’audit selon l’ISO 19011, couvrant les principes, le cycle d’audit et les compétences clés de l’auditeur.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q9 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Comment sont abordées les non-conformités ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Un module entier est dédié à la logique de qualification des écarts pour comprendre ce qui déclenche réellement une non-conformité et comment la formuler.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q10 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Y a-t-il des mises en situation pratiques ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Oui, le second jour prévoit un audit simulé complet basé sur des situations réelles issues du terrain.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q11 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Quelles compétences vais-je développer ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Vous développerez une lecture experte du référentiel, une méthodologie d'audit rigoureuse, une capacité d'analyse factuelle et une posture d'auditeur crédible.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q12 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Comment les acquis sont-ils évalués ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    L'évaluation repose sur des QCM, des études de cas d’analyse de conformité, l'évaluation d'un rapport d'audit et une restitution orale.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q13 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">La formation délivre-t-elle une certification d’auditeur ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Non. Elle délivre une attestation de formation « Auditeur QUALIOPI V9 » visant une montée en compétence opérationnelle et non une certification réglementaire.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q14 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Quel est le tarif de la formation ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Le tarif est de 1 490 € net de taxe.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q15 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Quel est le délai d’accès après l'inscription ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Le délai d’accès est compris entre 7 et 14 jours après la validation de votre dossier d'inscription.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q16 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">La formation est-elle accessible aux personnes en situation de handicap ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Oui, la formation est accessible. Une analyse des besoins est réalisée en amont pour adapter les modalités pédagogiques si nécessaire.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q17 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Qu'est-ce qu'une « lecture experte » du référentiel ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Il s'agit d'une analyse approfondie des critères et indicateurs pour identifier les preuves attendues et les zones de fragilité fréquemment constatées lors des audits.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q18 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Est-ce que j'apprendrai à rédiger un rapport d'audit ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Absolument, un module spécifique traite de la structure attendue, de la rédaction factuelle et de la restitution professionnelle des constats.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q19 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Pourquoi mentionnez-vous les besoins du marché de 2026 ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    En tant qu'expert, j'intègre cette perspective car le marché exigera en 2026 une maîtrise accrue de la qualité pour sécuriser les financements face à des contrôles renforcés.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Q20 -->
+                        <div class="faq-item bg-white rounded-lg border border-brand-100 shadow-sm overflow-hidden mb-4">
+                            <button class="w-full flex items-center justify-between p-6 text-left focus:outline-none hover:bg-brand-50 transition-colors">
+                                <span class="font-bold text-slate-900 pr-8 text-lg">Comment puis-je contacter l'organisme pour m'inscrire ?</span>
+                                <i data-lucide="chevron-down" class="text-slate-400"></i>
+                            </button>
+                            <div class="faq-answer max-h-0 overflow-hidden px-6 transition-all duration-300">
+                                <div class="pb-6 text-slate-600 leading-relaxed">
+                                    Vous pouvez envoyer un e-mail à l'adresse dédiée : <a href="mailto:devenir-auditeur-qualiopi@copilof.fr" class="text-accent-600 hover:text-accent-700 font-semibold underline">devenir-auditeur-qualiopi@copilof.fr</a>.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-12 text-center bg-white p-8 rounded-2xl shadow-lg shadow-brand-900/5 border border-brand-100 relative overflow-hidden">
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Une question spécifique non traitée ?</h3>
+                            <p class="text-slate-600 mb-6">Notre auditeur référent vous répond personnellement sous 24h.</p>
+                            <a href="#contact" class="inline-flex items-center px-6 py-3 bg-brand-900 hover:bg-brand-800 text-white font-semibold rounded-lg transition-colors">
+                                Poser ma question maintenant
+                            </a>
+                        </div>
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-accent-100 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 opacity-50"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="py-20 bg-white border-t border-brand-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Contactez-nous</h2>
+                        <p class="text-lg text-slate-600 max-w-2xl mx-auto">Vous avez des questions sur le financement, le programme ou les prérequis ? Remplissez le formulaire ci-dessous.</p>
+                    </div>
+
+                    <div class="grid lg:grid-cols-3 gap-12">
+                        <!-- Coordonnées -->
+                        <div class="lg:col-span-1 space-y-8">
+                            <div class="bg-brand-50 p-8 rounded-2xl border border-brand-100">
+                                <h3 class="text-xl font-bold text-brand-900 mb-6">Nos coordonnées</h3>
+                                <div class="space-y-6">
+                                    <div class="flex items-start gap-4"><div class="p-3 bg-white rounded-lg text-accent-600 shadow-sm"><i data-lucide="mail" class="w-5 h-5"></i></div><div><span class="block text-sm font-semibold text-slate-900">Email</span><a href="mailto:devenir-auditeur-qualiopi@copilof.fr" class="text-slate-600 hover:text-accent-600 transition-colors">devenir-auditeur-qualiopi@copilof.fr</a></div></div>
+                                    <div class="flex items-start gap-4"><div class="p-3 bg-white rounded-lg text-accent-600 shadow-sm"><i data-lucide="phone" class="w-5 h-5"></i></div><div><span class="block text-sm font-semibold text-slate-900">Téléphone</span><span class="text-slate-600">06 31 91 74 45</span></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formulaire -->
+                        <div class="lg:col-span-2">
+                            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-lg shadow-brand-900/5">
+                                <form id="contact-form" method="POST" action="/devenir-auditeur-qualiopi/send-mail.php" class="space-y-6">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div><label for="nom" class="block text-sm font-medium text-slate-700 mb-2">Nom *</label><input type="text" id="nom" name="nom" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Votre nom"></div>
+                                        <div><label for="prenom" class="block text-sm font-medium text-slate-700 mb-2">Prénom *</label><input type="text" id="prenom" name="prenom" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Votre prénom"></div>
+                                    </div>
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div><label for="email" class="block text-sm font-medium text-slate-700 mb-2">Email professionnel *</label><input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="vous@entreprise.com"></div>
+                                        <div><label for="phone" class="block text-sm font-medium text-slate-700 mb-2">Téléphone</label><input type="tel" id="phone" name="phone" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="06 00 00 00 00"></div>
+                                    </div>
+                                    <div>
+                                        <label for="sujet" class="block text-sm font-medium text-slate-700 mb-2">Sujet</label>
+                                        <select id="sujet" name="sujet" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all bg-white">
+                                            <option value="Renseignement">Je souhaite des renseignements</option>
+                                            <option value="Inscription">Je souhaite m'inscrire</option>
+                                            <option value="Devis">Je souhaite un devis</option>
+                                            <option value="Autre">Autre demande</option>
+                                        </select>
+                                    </div>
+                                    <div><label for="message" class="block text-sm font-medium text-slate-700 mb-2">Message *</label><textarea id="message" name="message" required rows="4" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all resize-none" placeholder="Bonjour..."></textarea></div>
+                                    <div class="pt-2">
+                                        <button type="submit" class="w-full py-4 px-6 rounded-lg text-white font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-md bg-accent-600 hover:bg-accent-700 hover:shadow-lg">
+                                            <span>Envoyer ma demande</span><i data-lucide="send" class="w-5 h-5"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                                <div id="form-success" class="hidden flex-col items-center justify-center py-12 text-center animate-fade-in">
+                                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6"><i data-lucide="check-circle" class="w-8 h-8"></i></div>
+                                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Message envoyé !</h3>
+                                    <p class="text-slate-600 max-w-md">Merci de nous avoir contactés. Un conseiller formation vous répondra sous 24h.</p>
+                                    <button id="reset-form-btn" class="mt-8 text-accent-600 font-semibold hover:text-accent-700 underline">Envoyer un autre message</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- VIEW: MENTIONS LEGALES (Hidden by default) -->
+    <div id="view-mentions" class="hidden-view bg-white min-h-screen">
+        <main class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+             <div class="max-w-4xl mx-auto">
+                <button onclick="navigateTo('view-home')" class="inline-flex items-center text-accent-600 hover:text-accent-700 font-medium mb-8 group">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform"></i>
+                    Retour à l'accueil
+                </button>
+
+                <h1 class="text-4xl font-bold text-slate-900 mb-10">Mentions Légales</h1>
+
+                <div class="prose prose-slate max-w-none space-y-8">
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">1. Éditeur du site</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Le site <strong>CopilOF</strong> est édité par :<br/>
+                            CopilOF Formation<br/>
+                            Forme juridique : SASU<br/>
+                            Capital social : 5000 €<br/>
+                            SIRET : 000 000 000 00000<br/>
+                            Email : devenir-auditeur-qualiopi@copilof.fr
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">2. Hébergement</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Ce site est hébergé par :<br/>
+                            <strong>Google Cloud Platform</strong> (Région Europe-West)<br/>
+                            Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irlande.
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">3. Propriété intellectuelle</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            L'ensemble du contenu de ce site (textes, images, programmes de formation) est la propriété exclusive de CopilOF. Toute reproduction totale ou partielle sans autorisation est interdite.
+                        </p>
+                    </section>
+                </div>
+             </div>
+        </main>
+    </div>
+
+    <!-- VIEW: CGV (Conditions Générales de Vente) -->
+    <div id="view-cgv" class="hidden-view bg-white min-h-screen">
+        <main class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+             <div class="max-w-4xl mx-auto">
+                <button onclick="navigateTo('view-home')" class="inline-flex items-center text-accent-600 hover:text-accent-700 font-medium mb-8 group">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform"></i>
+                    Retour à l'accueil
+                </button>
+
+                <h1 class="text-4xl font-bold text-slate-900 mb-10">Conditions Générales de Vente (CGV)</h1>
+
+                <div class="prose prose-slate max-w-none space-y-8">
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">1. Objet</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Les présentes Conditions Générales de Vente (CGV) s'appliquent à toutes les formations dispensées par CopilOF. Elles définissent les droits et obligations des parties dans le cadre de la vente de prestations de formation professionnelle, notamment la formation "Auditeur Qualiopi".
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">2. Prix et Modalités de paiement</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Le prix de la formation est fixé à <strong>1 490 € net de taxe</strong>. Le paiement est exigible selon les modalités définies dans la convention de formation. En cas de financement personnel, un acompte de 30% peut être demandé à l'inscription.
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">3. Inscription</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            L'inscription est validée après réception du devis signé ou de la convention de formation, accompagné le cas échéant de l'accord de prise en charge par un OPCO ou France Travail.
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">4. Annulation et Report</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Toute annulation par le client doit être communiquée par écrit. Moins de 10 jours avant le début de la formation, des frais d'annulation pourront être appliqués conformément à la convention signée. CopilOF se réserve le droit de reporter une session si le nombre de participants est insuffisant.
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">5. Propriété intellectuelle</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Les supports pédagogiques remis lors de la formation sont la propriété exclusive de CopilOF. Ils ne peuvent être reproduits ou diffusés sans autorisation écrite préalable.
+                        </p>
+                    </section>
+                </div>
+             </div>
+        </main>
+    </div>
+
+    <!-- VIEW: Politique de Confidentialité -->
+    <div id="view-privacy" class="hidden-view bg-white min-h-screen">
+        <main class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+             <div class="max-w-4xl mx-auto">
+                <button onclick="navigateTo('view-home')" class="inline-flex items-center text-accent-600 hover:text-accent-700 font-medium mb-8 group">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform"></i>
+                    Retour à l'accueil
+                </button>
+
+                <h1 class="text-4xl font-bold text-slate-900 mb-10">Politique de Confidentialité</h1>
+
+                <div class="prose prose-slate max-w-none space-y-8">
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">1. Collecte des données</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Les informations recueillies via le formulaire de contact (Nom, Prénom, Email, Téléphone) sont enregistrées dans un fichier informatisé par CopilOF. La base légale du traitement est l'intérêt légitime pour répondre à votre demande commerciale.
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">2. Utilisation des données</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Les données collectées seront communiquées aux seuls destinataires suivants : l'équipe pédagogique et administrative de CopilOF. Elles ne sont jamais vendues à des tiers.
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">3. Durée de conservation</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Vos données sont conservées pendant une durée de 3 ans à compter du dernier contact si aucune inscription n'est formalisée.
+                        </p>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-bold text-brand-900 mb-4">4. Vos droits</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            Vous pouvez accéder aux données vous concernant, les rectifier, demander leur effacement ou exercer votre droit à la limitation du traitement de vos données. Pour exercer ces droits, contactez-nous à : devenir-auditeur-qualiopi@copilof.fr
+                        </p>
+                    </section>
+                </div>
+             </div>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-950 text-slate-300 py-12 border-t border-brand-900 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <div class="col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                       <i data-lucide="headset" class="w-6 h-6 text-white"></i>
+                       <div class="flex items-baseline tracking-tight">
+                        <span class="text-2xl font-extrabold text-white">Copil</span>
+                        <span class="text-2xl font-extrabold text-accent-500">OF</span>
+                      </div>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">Formation d'excellence pour maîtriser l'audit Qualiopi V9, animée par des auditeurs de terrain.</p>
+                </div>
+                <div class="col-span-1">
+                    <h4 class="text-white font-semibold mb-4">Liens Rapides</h4>
+                    <ul class="space-y-2 text-sm">
+                      <li><a href="#" onclick="navigateTo('view-home')" class="hover:text-accent-500 transition-colors">Accueil</a></li>
+                      <li><a href="#programme" onclick="navigateTo('view-home')" class="hover:text-accent-500 transition-colors">Programme</a></li>
+                      <li><a href="#infos" onclick="navigateTo('view-home')" class="hover:text-accent-500 transition-colors">Tarifs & Dates</a></li>
+                      <li><a href="#contact" onclick="navigateTo('view-home')" class="hover:text-accent-500 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1">
+                    <h4 class="text-white font-semibold mb-4">Contact</h4>
+                    <div class="flex items-center gap-2 mb-4">
+                      <i data-lucide="mail" class="w-4 h-4 text-accent-500"></i>
+                      <a href="mailto:devenir-auditeur-qualiopi@copilof.fr" class="hover:text-white transition-colors">devenir-auditeur-qualiopi@copilof.fr</a>
+                    </div>
+                    <div class="flex gap-4 mt-6">
+                        <a href="#" class="p-2 bg-brand-900 rounded-full hover:bg-accent-600 transition-colors">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-brand-900 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+                <p>&copy; 2025 CopilOF. Tous droits réservés.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <button onclick="navigateTo('view-mentions')" class="hover:text-slate-300">Mentions Légales</button>
+                    <button onclick="navigateTo('view-cgv')" class="hover:text-slate-300">CGV</button>
+                    <button onclick="navigateTo('view-privacy')" class="hover:text-slate-300">Politique de confidentialité</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Fixed Floating Call Button -->
+    <a href="tel:+33631917445" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[100] flex items-center justify-center gap-3 px-5 py-3 md:px-6 md:py-4 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full shadow-2xl transition-all duration-300 transform hover:scale-105 print:hidden border-2 border-white/20 backdrop-blur-sm group">
+        <i data-lucide="phone" class="w-6 h-6 animate-pulse"></i>
+        <span class="font-bold text-lg">06 31 91 74 45</span>
+    </a>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Scripts pour l'interactivité (Menu, Scroll, FAQ, Form, Navigation) -->
+    <script>
+        // Initialisation AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 50
+        });
+
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+
+        // --- NAVIGATION SPA SIMPLIFIÉE ---
+        // Liste de toutes les vues possibles
+        const views = ['view-home', 'view-mentions', 'view-cgv', 'view-privacy'];
+
+        function navigateTo(viewId) {
+            // Masquer toutes les vues
+            views.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('hidden-view');
+            });
+
+            // Afficher la vue demandée
+            const targetEl = document.getElementById(viewId);
+            if(targetEl) {
+                targetEl.classList.remove('hidden-view');
+            }
+
+            // Remonter en haut de page
+            window.scrollTo(0, 0);
+
+            // Relancer les animations AOS si on revient sur la home
+            if (viewId === 'view-home') {
+                 setTimeout(() => {
+                    AOS.refresh();
+                }, 100);
+            }
+        }
+        
+        // Ancienne fonction conservée pour compatibilité si encore appelée inline, redirige vers navigateTo
+        function showHome() { navigateTo('view-home'); }
+        function showMentions() { navigateTo('view-mentions'); }
+
+
+        // --- MOBILE MENU ---
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        
+        if(btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                });
+            });
+        }
+
+        // --- HEADER SCROLL EFFECT ---
+        const header = document.getElementById('main-header');
+        const logoText1 = document.getElementById('logo-text-1');
+        const logoText2 = document.getElementById('logo-text-2');
+        const logoBg = document.getElementById('logo-bg');
+        const headerCta = document.getElementById('header-cta');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const menuBtn = document.getElementById('mobile-menu-btn');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                header.classList.add('bg-white', 'shadow-md', 'py-3');
+                header.classList.remove('bg-transparent', 'py-5');
+                
+                logoText1.classList.add('text-brand-900');
+                logoText1.classList.remove('text-white');
+                
+                logoText2.classList.add('text-accent-600');
+                logoText2.classList.remove('text-accent-400');
+
+                logoBg.classList.add('border-brand-900', 'text-brand-900');
+                logoBg.classList.remove('border-white', 'text-white');
+
+                headerCta.classList.add('bg-accent-600', 'text-white', 'hover:bg-accent-700');
+                headerCta.classList.remove('bg-white', 'text-brand-900', 'hover:bg-slate-100');
+
+                if(menuBtn) {
+                   menuBtn.classList.add('text-slate-900');
+                   menuBtn.classList.remove('text-white');
+                }
+
+                navLinks.forEach(link => {
+                    link.classList.add('text-slate-700');
+                    link.classList.remove('text-slate-100');
+                });
+            } else {
+                header.classList.remove('bg-white', 'shadow-md', 'py-3');
+                header.classList.add('bg-transparent', 'py-5');
+
+                logoText1.classList.remove('text-brand-900');
+                logoText1.classList.add('text-white');
+
+                logoText2.classList.remove('text-accent-600');
+                logoText2.classList.add('text-accent-400');
+
+                logoBg.classList.remove('border-brand-900', 'text-brand-900');
+                logoBg.classList.add('border-white', 'text-white');
+
+                headerCta.classList.remove('bg-accent-600', 'text-white', 'hover:bg-accent-700');
+                headerCta.classList.add('bg-white', 'text-brand-900', 'hover:bg-slate-100');
+
+                if(menuBtn) {
+                   menuBtn.classList.remove('text-slate-900');
+                   menuBtn.classList.add('text-white');
+                }
+
+                navLinks.forEach(link => {
+                    link.classList.remove('text-slate-700');
+                    link.classList.add('text-slate-100');
+                });
+            }
+        });
+
+        // --- FAQ ACCORDION ---
+        document.querySelectorAll('.faq-item button').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('[data-lucide="chevron-down"]');
+                
+                if (answer.style.maxHeight) {
+                    answer.style.maxHeight = null;
+                    if(icon) icon.style.transform = "rotate(0deg)";
+                } else {
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                    if(icon) icon.style.transform = "rotate(180deg)";
+                }
+            });
+        });
+
+        // --- FORM SUBMISSION ---
+        const form = document.getElementById('contact-form');
+        const successDiv = document.getElementById('form-success');
+        const resetBtn = document.getElementById('reset-form-btn');
+
+        if(form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = 'Envoi en cours...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    form.classList.add('hidden');
+                    successDiv.classList.remove('hidden');
+                    successDiv.classList.add('flex');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 1000);
+            });
+        }
+
+        if(resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                form.reset();
+                successDiv.classList.add('hidden');
+                successDiv.classList.remove('flex');
+                form.classList.remove('hidden');
+            });
+        }
+    </script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams  = new URLSearchParams(window.location.search);
+    const success    = urlParams.get('success');
+
+    const form       = document.getElementById('contact-form');
+    const successDiv = document.getElementById('form-success');
+    const resetBtn   = document.getElementById('reset-form-btn');
+
+    // Affichage du message de succès après envoi
+    if (success === '1' && form && successDiv) {
+        form.classList.add('hidden');
+        successDiv.classList.remove('hidden');
+        successDiv.classList.add('flex');
+    }
+
+    // Bouton "Envoyer un autre message"
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            window.location.href = '/devenir-auditeur-qualiopi/#contact';
+        });
+    }
+});
+</script>
+
+</body>
+</html>
